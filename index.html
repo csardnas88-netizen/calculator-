@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>División de Cuartos — JW Marriott</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#111827">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Cuartos">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #111827; --navy-mid: #1c2a42; --navy-card: #1e2f4a; --navy-lite: #243354;
+    --gold: #c9a96e; --gold-dim: #9a7a4a; --white: #f0ede8; --muted: #8a9ab5;
+    --border: rgba(255,255,255,0.08); --border-gold: rgba(201,169,110,0.3); --green: #4caf7d;
+  }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  .app-header {
+    width: 100%;
+    background: var(--navy-mid);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+  }
+  .jw-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.75rem; font-weight: 600;
+    letter-spacing: 0.3em; color: var(--gold);
+    text-transform: uppercase; line-height: 1;
+    white-space: nowrap;
+  }
+  .jw-logo span {
+    display: block; font-family: 'Inter', sans-serif;
+    font-size: 0.5rem; font-weight: 400;
+    letter-spacing: 0.18em; color: var(--muted); margin-top: 0.2rem;
+  }
+  .hdiv { width: 1px; height: 26px; background: var(--border); flex-shrink: 0; }
+  .htitle {
+    font-size: 0.65rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* CENTER WRAPPER */
+  .center {
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    flex: 1;
+  }
+
+  /* PAGE TITLE */
+  .page-title h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem; font-weight: 600; line-height: 1; color: var(--white);
+  }
+  .page-title h1 em { color: var(--gold); font-style: normal; }
+  .page-title p {
+    font-size: 0.62rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--muted); margin-top: 0.4rem;
+  }
+
+  /* CARD */
+  .card {
+    width: 100%;
+    background: var(--navy-card);
+    border: 1px solid var(--border);
+    border-radius: 4px; padding: 1.25rem;
+  }
+  .card-label {
+    font-size: 0.55rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 1rem;
+  }
+
+  /* INPUT ROW — key fix: min-width 0 on children */
+  .input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    width: 100%;
+  }
+  .input-row > div { min-width: 0; }
+
+  .field-label {
+    font-size: 0.55rem; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--muted);
+    display: block; margin-bottom: 0.4rem;
+  }
+
+  /* STEPPER — key fix: width 100%, no fixed px on input */
+  .stepper {
+    display: flex; align-items: center; width: 100%;
+    background: var(--navy-mid); border: 1px solid var(--border);
+    border-radius: 3px; overflow: hidden;
+  }
+  .stepper:focus-within { border-color: var(--border-gold); }
+  .stepper button {
+    background: none; border: none; cursor: pointer;
+    width: 36px; height: 50px; font-size: 1.1rem; color: var(--muted);
+    flex-shrink: 0; -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+  }
+  .stepper button:active { background: var(--navy-lite); color: var(--gold); }
+  .stepper input {
+    flex: 1; min-width: 0; text-align: center; border: none; background: transparent;
+    font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600;
+    color: var(--white); padding: 0;
+    -webkit-appearance: none; -moz-appearance: textfield;
+  }
+  .stepper input::-webkit-inner-spin-button,
+  .stepper input::-webkit-outer-spin-button { -webkit-appearance: none; }
+  .stepper input:focus { outline: none; }
+
+  /* DIVIDER */
+  .gold-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border-gold), transparent);
+  }
+
+  /* RESULT */
+  .result-card {
+    width: 100%;
+    background: var(--navy-card); border: 1px solid var(--border-gold);
+    border-radius: 4px; padding: 1.25rem;
+    position: relative; overflow: hidden;
+    animation: fadeUp 0.3s ease;
+  }
+  .result-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(to right, var(--gold-dim), var(--gold), var(--gold-dim));
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .result-eyebrow { font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+  .result-main { display: flex; align-items: baseline; gap: 0.5rem; margin-bottom: 0.2rem; }
+  .result-number { font-family: 'Cormorant Garamond', serif; font-size: 3.8rem; font-weight: 600; line-height: 1; color: var(--white); }
+  .result-unit { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); line-height: 1.4; }
+  .result-desc { font-size: 0.68rem; color: var(--muted); margin-bottom: 1.1rem; }
+  .breakdown { border-top: 1px solid var(--border); padding-top: 0.9rem; display: grid; gap: 0.45rem; }
+  .breakdown-row { display: flex; justify-content: space-between; font-size: 0.72rem; }
+  .breakdown-row .l { color: var(--muted); }
+  .breakdown-row .v { font-weight: 500; color: var(--white); }
+  .ok { color: var(--green) !important; }
+  .warn { color: var(--gold) !important; }
+  .chips-label {
+    font-size: 0.55rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--muted); margin: 1rem 0 0.5rem;
+    border-top: 1px solid var(--border); padding-top: 0.9rem;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .chip {
+    background: var(--navy-lite); border: 1px solid var(--border);
+    border-radius: 2px; padding: 0.25rem 0.6rem;
+    font-size: 0.65rem; color: var(--muted); white-space: nowrap;
+  }
+  .chip b { color: var(--gold); font-weight: 500; }
+  .empty { text-align: center; color: var(--muted); font-size: 0.68rem; padding: 2rem 0; letter-spacing: 0.1em; text-transform: uppercase; }
+
+  footer {
+    text-align: center; font-size: 0.55rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--muted);
+    padding: 1.25rem; border-top: 1px solid var(--border); opacity: 0.5;
+  }
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="jw-logo">JW Ordering<span>Houston Downtown · Housekeeping</span></div>
+  <div class="hdiv"></div>
+  <span class="htitle">División de Cuartos</span>
+</div>
+
+<div class="center">
+
+  <div class="page-title">
+    <h1>División de <em>Cuartos</em></h1>
+    <p>Distribución por persona · Housekeeping</p>
+  </div>
+
+  <div class="card">
+    <p class="card-label">Ingresa los valores</p>
+    <div class="input-row">
+      <div>
+        <label class="field-label">Cuartos totales</label>
+        <div class="stepper">
+          <button onclick="step('a',-1)">−</button>
+          <input type="number" id="input-a" value="50" min="1" oninput="calc()">
+          <button onclick="step('a',1)">+</button>
+        </div>
+      </div>
+      <div>
+        <label class="field-label">Personas</label>
+        <div class="stepper">
+          <button onclick="step('b',-1)">−</button>
+          <input type="number" id="input-b" value="5" min="1" oninput="calc()">
+          <button onclick="step('b',1)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gold-divider"></div>
+
+  <div id="result-area">
+    <div class="result-card"><p class="empty">Ingresa los valores para calcular</p></div>
+  </div>
+
+</div>
+
+<footer>JW Marriott Houston Downtown &nbsp;·&nbsp; Housekeeping Tools</footer>
+
+<script>
+  if ('serviceWorker' in navigator)
+    window.addEventListener('load', () => navigator.serviceWorker.register('/calculator-/sw.js').catch(() => {}));
+
+  function step(id, d) {
+    const el = document.getElementById('input-' + id);
+    el.value = Math.max(1, (parseInt(el.value) || 0) + d);
+    calc();
+  }
+
+  function calc() {
+    const rooms  = parseInt(document.getElementById('input-a').value) || 0;
+    const people = parseInt(document.getElementById('input-b').value) || 0;
+    const area   = document.getElementById('result-area');
+    if (!rooms || !people) {
+      area.innerHTML = '<div class="result-card"><p class="empty">Ingresa valores mayores a cero</p></div>';
+      return;
+    }
+    const base = Math.floor(rooms / people);
+    const rem  = rooms % people;
+    let chips = '';
+    for (let i = 0; i < people; i++) {
+      chips += `<span class="chip">Persona ${i+1} <b>${base + (i < rem ? 1 : 0)}</b></span>`;
+    }
+    area.innerHTML = `
+      <div class="result-card">
+        <p class="result-eyebrow">Resultado</p>
+        <div class="result-main">
+          <span class="result-number">${base}</span>
+          <span class="result-unit">cuartos<br>por persona</span>
+        </div>
+        <p class="result-desc">${rem > 0 ? `${rem} persona${rem>1?'s reciben':' recibe'} un cuarto adicional` : 'División exacta — sin residuo ✓'}</p>
+        <div class="breakdown">
+          <div class="breakdown-row"><span class="l">Total cuartos</span><span class="v">${rooms}</span></div>
+          <div class="breakdown-row"><span class="l">Personas</span><span class="v">${people}</span></div>
+          <div class="breakdown-row"><span class="l">Base por persona</span><span class="v">${base}</span></div>
+          <div class="breakdown-row"><span class="l">Residuo</span><span class="v ${rem===0?'ok':'warn'}">${rem} cuarto${rem!==1?'s':''}</span></div>
+        </div>
+        <p class="chips-label">Distribución por persona</p>
+        <div class="chips">${chips}</div>
+      </div>`;
+  }
+  calc();
+</script>
+</body>
+</html>
